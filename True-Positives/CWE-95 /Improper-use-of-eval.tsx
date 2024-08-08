@@ -1,3 +1,7 @@
+/*
+Unsanitized input from a React useState value flows into eval, where it is executed as JavaScript code. This may result in a Code Injection vulnerability.
+*/
+
 import React, { useState } from 'react';
 
 const Calculator: React.FC = () => {
