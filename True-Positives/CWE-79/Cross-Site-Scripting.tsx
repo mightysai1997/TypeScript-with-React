@@ -1,3 +1,7 @@
+/*
+Unsanitized input from a React useState value flows into innerHTML, where it is used to dynamically construct the HTML page on client side. This may result in a DOM Based Cross-Site Scripting attack (DOMXSS).
+*/
+
 import React, { useState } from 'react';
 
 const CommentBox: React.FC = () => {
