@@ -1,10 +1,10 @@
 import React from 'react';
 
-const apiKey: string = 'YOUR_SECRET_API_KEY';
+const API_KEY = 'YOUR_SECRET_API_KEY';
 
-const MyComponent: React.FC = () => {
+const DataFetcher: React.FC = () => {
   const fetchData = async () => {
-    const response = await fetch(`https://api.example.com/data?key=${apiKey}`);
+    const response = await fetch(`https://api.example.com/data?key=${API_KEY}`);
     const data = await response.json();
     console.log(data);
   };
@@ -13,7 +13,7 @@ const MyComponent: React.FC = () => {
     fetchData();
   }, []);
 
-  return <div>Data fetching component</div>;
+  return <div>Fetching data...</div>;
 };
 
-export default MyComponent;
+export default DataFetcher;
