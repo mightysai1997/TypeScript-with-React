@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
-const ContactForm: React.FC = () => {
-  const [email, setEmail] = useState('');
+const UserForm: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
 
   const handleSubmit = () => {
-    // Email is sent directly without validation
-    console.log(`Sending email to: ${email}`);
+    console.log('Submitted email:', email); // No validation or sanitization
   };
 
   return (
@@ -20,4 +19,4 @@ const ContactForm: React.FC = () => {
   );
 };
 
-export default ContactForm;
+export default UserForm;
