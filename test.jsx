@@ -1,4 +1,7 @@
-// Vulnerable Code
-function UserProfile({ user }) {
-  return <div>{user.bio}</div>; // Directly rendering user input
+import React from 'react';
+
+function Greeting({ name }) {
+  return <h1>Hello, {name}!</h1>;
 }
+
+export default Greeting;
