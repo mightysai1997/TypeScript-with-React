@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-interface CommentProps {
-  comment: string;
-}
+const CommentBox: React.FC = () => {
+  const [comment, setComment] = useState<string>('');
 
-const Comment: React.FC<CommentProps> = ({ comment }) => {
-  return <div dangerouslySetInnerHTML={{ __html: comment }} />;
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // Potential XSS vulnerability
+    document.getElementById('comments')!.innerHTML = comment;
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={comment}
+        onChange={handleCommentChange}
+      />
+      <button onClick={handleSubmit}>Submit</button>
+      <div id="comments"></div>
+    </div>
+  );
 };
 
-export default Comment;
+export default CommentBox;
