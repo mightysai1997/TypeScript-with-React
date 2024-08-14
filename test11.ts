@@ -1,30 +1,27 @@
-/**
- * Executes a piece of code provided as a string.
- * @param code - The code to execute.
- */
-function executeCode(code: string): void {
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-vulnerable-calculator',
+  template: `
+    <div>
+      <input [(ngModel)]="expression" placeholder="Enter expression" />
+      <button (click)="calculate()">Calculate</button>
+      <p *ngIf="result !== undefined">Result: {{ result }}</p>
+    </div>
+  `,
+  styles: []
+})
+export class VulnerableCalculatorComponent {
+  expression: string = '';
+  result: number | undefined;
+
+  calculate(): void {
     try {
-        // Dangerous: Executes any code passed to it as a string
-        const result = eval(code);
-        console.log(`Result: ${result}`);
+      // Dangerous: Executes any code passed to it as a string
+      this.result = eval(this.expression);
     } catch (error) {
-        console.error('Error executing code:', error);
+      console.error('Error executing code:', error);
+      this.result = undefined;
     }
+  }
 }
-
-// Example usage with a dynamic expression
-const dynamicExpression = '2 + 2'; // Example of a dynamic expression
-
-// Execute the expression
-executeCode(dynamicExpression);
-
-// Example usage with a more complex dynamic code
-const complexCode = `
-    let a = 5;
-    let b = 10;
-    let sum = a + b;
-    sum * 2; // This should return 30
-`;
-
-// Execute the complex code
-executeCode(complexCode);
