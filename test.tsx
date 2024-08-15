@@ -1,21 +1,14 @@
-// src/App.tsx
+// src/components/DeserializeComponent.tsx
 import React from 'react';
 
-interface GreetingProps {
-  name?: string; // Optional prop without default value
-}
-
-const Greeting: React.FC<GreetingProps> = ({ name }) => {
-  // Potential problem: 'name' could be undefined
-  return <div>Hello, {name.toUpperCase()}!</div>;
-};
-
-const App: React.FC = () => {
+const DeserializeComponent: React.FC<{ serializedData: string }> = ({ serializedData }) => {
+  const data = JSON.parse(serializedData); // Insecure deserialization
   return (
-    <div className="App">
-      <Greeting name={undefined} /> {/* Passing undefined explicitly */}
+    <div>
+      <h1>Deserialized Data</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 };
 
-export default App;
+export default DeserializeComponent;
