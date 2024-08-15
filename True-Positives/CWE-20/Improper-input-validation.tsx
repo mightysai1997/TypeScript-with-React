@@ -1,18 +1,32 @@
+/*
+Unsanitized input from a React useState value flows into innerHTML, where it is used to dynamically construct the HTML page on client side. This may result in a DOM Based Cross-Site Scripting attack (DOMXSS).
+*/
+
 import React, { useState } from 'react';
 
-const UserProfile: React.FC = () => {
-  const [userInput, setUserInput] = useState('');
+const CommentBox: React.FC = () => {
+  const [comment, setComment] = useState<string>('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInput(e.target.value);
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // Potential XSS vulnerability
+    document.getElementById('comments')!.innerHTML = comment;
   };
 
   return (
     <div>
-      <input type="text" value={userInput} onChange={handleChange} />
-      <p>Welcome, {userInput}</p> {/* Potential XSS vulnerability */}
+      <input
+        type="text"
+        value={comment}
+        onChange={handleCommentChange}
+      />
+      <button onClick={handleSubmit}>Submit</button>
+      <div id="comments"></div>
     </div>
   );
 };
 
-export default UserProfile;
+export default CommentBox;
