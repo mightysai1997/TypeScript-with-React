@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
-const FetchData: React.FC = () => {
-  const [data, setData] = useState<string | null>(null);
+const UserProfile: React.FC = () => {
+  const [userInput, setUserInput] = useState('');
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://example.com/api/data'); // Potentially unsafe URL
-      setData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInput(e.target.value);
   };
 
   return (
     <div>
-      <button onClick={fetchData}>Fetch Data</button>
-      <div>{data}</div>
+      <input type="text" value={userInput} onChange={handleChange} />
+      <p>Welcome, {userInput}</p> {/* Potential XSS vulnerability */}
     </div>
   );
 };
 
-export default FetchData;
+export default UserProfile;
