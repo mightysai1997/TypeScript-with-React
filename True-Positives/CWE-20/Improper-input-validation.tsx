@@ -1,26 +1,30 @@
-// src/components/UnsafeCommandInjectionComponent.tsx
+// src/components/UnsafeIDORComponent.tsx
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const UnsafeCommandInjectionComponent: React.FC = () => {
-  const [command, setCommand] = useState<string>('');
-  const [result, setResult] = useState<string | null>(null);
+const UnsafeIDORComponent: React.FC = () => {
+  const [resourceId, setResourceId] = useState<string>('');
+  const [data, setData] = useState<string | null>(null);
 
-  const executeCommand = () => {
-    // Dangerous direct execution
-    fetch(`/api/execute?command=${encodeURIComponent(command)}`)
-      .then(response => response.text())
-      .then(output => setResult(output))
-      .catch(error => console.error('Command error:', error));
+  const fetchResource = () => {
+    // Directly using user input in the request URL
+    axios.get(`/api/resource/${resourceId}`)
+      .then(response => setData(response.data))
+      .catch(error => console.error('Fetch error:', error));
   };
 
   return (
     <div>
-      <h1>Unsafe Command Injection</h1>
-      <textarea value={command} onChange={e => setCommand(e.target.value)} />
-      <button onClick={executeCommand}>Execute Command</button>
-      <pre>{result}</pre>
+      <h1>Insecure Direct Object Reference</h1>
+      <input
+        type="text"
+        value={resourceId}
+        onChange={e => setResourceId(e.target.value)}
+      />
+      <button onClick={fetchResource}>Fetch Resource</button>
+      <pre>{data}</pre>
     </div>
   );
 };
 
-export default UnsafeCommandInjectionComponent;
+export default UnsafeIDORComponent;
