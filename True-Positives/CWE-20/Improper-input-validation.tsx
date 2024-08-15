@@ -1,22 +1,13 @@
-// src/components/ApiRequestComponent.tsx
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// src/components/XSSComponent.tsx
+import React from 'react';
 
-const ApiRequestComponent: React.FC<{ query: string }> = ({ query }) => {
-  const [response, setResponse] = useState<string | null>(null);
-
-  useEffect(() => {
-    axios.get(`https://api.example.com/search?query=${query}`) // Untrusted data in URL
-      .then(res => setResponse(res.data))
-      .catch(err => console.error('API request error:', err));
-  }, [query]);
-
+const XSSComponent: React.FC<{ userInput: string }> = ({ userInput }) => {
   return (
     <div>
-      <h1>API Response</h1>
-      <pre>{response}</pre>
+      <h1>Dangerous Content</h1>
+      <p dangerouslySetInnerHTML={{ __html: userInput }} /> {/* XSS Vulnerability */}
     </div>
   );
 };
 
-export default ApiRequestComponent;
+export default XSSComponent;
