@@ -1,26 +1,35 @@
-// src/components/UnsafeCommandInjectionComponent.tsx
+// src/components/UnsafeAuthComponent.tsx
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const UnsafeCommandInjectionComponent: React.FC = () => {
-  const [command, setCommand] = useState<string>('');
-  const [result, setResult] = useState<string | null>(null);
+const UnsafeAuthComponent: React.FC = () => {
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const executeCommand = () => {
-    // Dangerous direct execution
-    fetch(`/api/execute?command=${encodeURIComponent(command)}`)
-      .then(response => response.text())
-      .then(output => setResult(output))
-      .catch(error => console.error('Command error:', error));
+  const login = () => {
+    axios.post('/api/login', { username, password })
+      .then(response => {
+        localStorage.setItem('authToken', response.data.token); // Storing token insecurely
+      })
+      .catch(error => console.error('Login error:', error));
   };
 
   return (
     <div>
-      <h1>Unsafe Command Injection</h1>
-      <textarea value={command} onChange={e => setCommand(e.target.value)} />
-      <button onClick={executeCommand}>Execute Command</button>
-      <pre>{result}</pre>
+      <h1>Broken Authentication</h1>
+      <input
+        type="text"
+        value={username}
+        onChange={e => setUsername(e.target.value)}
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+      />
+      <button onClick={login}>Login</button>
     </div>
   );
 };
 
-export default UnsafeCommandInjectionComponent;
+export default UnsafeAuthComponent;
