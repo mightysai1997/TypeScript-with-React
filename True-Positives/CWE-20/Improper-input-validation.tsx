@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+// src/components/ApiRequestComponent.tsx
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const UserForm: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
+const ApiRequestComponent: React.FC<{ query: string }> = ({ query }) => {
+  const [response, setResponse] = useState<string | null>(null);
 
-  const handleSubmit = () => {
-    console.log('Submitted email:', email); // No validation or sanitization
-  };
+  useEffect(() => {
+    axios.get(`https://api.example.com/search?query=${query}`) // Untrusted data in URL
+      .then(res => setResponse(res.data))
+      .catch(err => console.error('API request error:', err));
+  }, [query]);
 
   return (
     <div>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button onClick={handleSubmit}>Submit</button>
+      <h1>API Response</h1>
+      <pre>{response}</pre>
     </div>
   );
 };
 
-export default UserForm;
+export default ApiRequestComponent;
