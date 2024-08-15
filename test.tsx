@@ -1,14 +1,15 @@
-// src/components/DeserializeComponent.tsx
+// src/components/SensitiveDataComponent.tsx
 import React from 'react';
 
-const DeserializeComponent: React.FC<{ serializedData: string }> = ({ serializedData }) => {
-  const data = JSON.parse(serializedData); // Insecure deserialization
+const SensitiveDataComponent: React.FC = () => {
+  const apiKey = 'YOUR_SENSITIVE_API_KEY'; // Hardcoded sensitive information
+
   return (
     <div>
-      <h1>Deserialized Data</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <h1>API Key Exposure</h1>
+      <p>API Key: {apiKey}</p>
     </div>
   );
 };
 
-export default DeserializeComponent;
+export default SensitiveDataComponent;
