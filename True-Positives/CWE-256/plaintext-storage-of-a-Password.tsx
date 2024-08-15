@@ -1,19 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const API_KEY = 'YOUR_SECRET_API_KEY';
+const FileUploader: React.FC = () => {
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
 
-const DataFetcher: React.FC = () => {
-  const fetchData = async () => {
-    const response = await fetch(`https://api.example.com/data?key=${API_KEY}`);
-    const data = await response.json();
-    console.log(data);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setFile(event.target.files[0]);
+    }
   };
 
-  React.useEffect(() => {
-    fetchData();
-  }, []);
+  const handleUpload = async () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
 
-  return <div>Fetching data...</div>;
+      try {
+        const response = await axios.post('http://localhost:3000/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        setUploadStatus('Upload successful!');
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        setUploadStatus('Upload failed.');
+      }
+    }
+  };
+
+  return (
+    <div>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload}>Upload</button>
+      {uploadStatus && <p>{uploadStatus}</p>}
+    </div>
+  );
 };
 
-export default DataFetcher;
+export default FileUploader;
