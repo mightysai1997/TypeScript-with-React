@@ -1,35 +1,20 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-const VulnerableApiCall: React.FC = () => {
-  const [input, setInput] = useState<string>('');
-  const [data, setData] = useState<string | null>(null);
+const Dashboard: React.FC = () => {
+  const [userRole, setUserRole] = useState<string | null>(null);
 
-  const handleFetchData = async () => {
-    try {
-      // Dangerous: Directly including user input in the API request URL
-      const response = await axios.get(`https://api.example.com/data?query=${input}`);
-      setData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setData(null);
-    }
-  };
+  useEffect(() => {
+    // Fake authentication check
+    const role = 'admin'; // Hardcoded role for illustration purposes
+    setUserRole(role);
+  }, []);
 
   return (
     <div>
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Enter search query"
-      />
-      <button onClick={handleFetchData}>Fetch Data</button>
-      <div>
-        {data && <p>Data: {data}</p>}
-      </div>
+      <h1>Dashboard</h1>
+      {userRole === 'admin' && <button>Admin Settings</button>} {/* Unauthorized access possible */}
     </div>
   );
 };
 
-export default VulnerableApiCall;
+export default Dashboard;
