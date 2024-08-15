@@ -1,31 +1,35 @@
-// src/components/UnsafeFileFetchComponent.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const UnsafeFileFetchComponent: React.FC = () => {
-  const [filePath, setFilePath] = useState<string>('');
-  const [fileContent, setFileContent] = useState<string | null>(null);
+const VulnerableApiCall: React.FC = () => {
+  const [input, setInput] = useState<string>('');
+  const [data, setData] = useState<string | null>(null);
 
-  const fetchFile = () => {
-    // Constructing file path from user input
-    axios.get(`/api/files/${filePath}`)
-      .then(response => setFileContent(response.data))
-      .catch(error => console.error('Error fetching file:', error));
+  const handleFetchData = async () => {
+    try {
+      // Dangerous: Directly including user input in the API request URL
+      const response = await axios.get(`https://api.example.com/data?query=${input}`);
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setData(null);
+    }
   };
 
   return (
     <div>
-      <h1>Fetch File with Path Traversal</h1>
       <input
         type="text"
-        value={filePath}
-        onChange={e => setFilePath(e.target.value)}
-        placeholder="Enter file path"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter search query"
       />
-      <button onClick={fetchFile}>Fetch File</button>
-      <pre>{fileContent}</pre>
+      <button onClick={handleFetchData}>Fetch Data</button>
+      <div>
+        {data && <p>Data: {data}</p>}
+      </div>
     </div>
   );
 };
 
-export default UnsafeFileFetchComponent;
+export default VulnerableApiCall;
