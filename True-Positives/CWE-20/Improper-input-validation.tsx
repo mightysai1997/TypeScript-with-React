@@ -1,26 +1,25 @@
-// src/components/VulnerableAxiosComponent.tsx
-import React, { useEffect, useState } from 'react';
-import axios from 'axios'; // Known vulnerable version
+// src/components/UnsafeSQLComponent.tsx
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const VulnerableAxiosComponent: React.FC = () => {
-  const [data, setData] = useState<string | null>(null);
+const UnsafeSQLComponent: React.FC = () => {
+  const [query, setQuery] = useState<string>('');
+  const [result, setResult] = useState<string | null>(null);
 
-  useEffect(() => {
-    axios.get('https://api.example.com/data') // Example endpoint
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
+  const executeQuery = () => {
+    axios.get(`https://api.example.com/search?query=${query}`) // Unsafe query construction
+      .then(response => setResult(response.data))
+      .catch(error => console.error('Query error:', error));
+  };
 
   return (
     <div>
-      <h1>Vulnerable Axios Component</h1>
-      <p>Data: {data}</p>
+      <h1>Unsafe SQL Injection</h1>
+      <textarea value={query} onChange={e => setQuery(e.target.value)} />
+      <button onClick={executeQuery}>Execute Query</button>
+      <pre>{result}</pre>
     </div>
   );
 };
 
-export default VulnerableAxiosComponent;
+export default UnsafeSQLComponent;
