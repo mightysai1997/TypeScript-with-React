@@ -1,42 +1,41 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const FileUploader: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+const CommandSender: React.FC = () => {
+  const [command, setCommand] = useState('');
+  const [response, setResponse] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setFile(event.target.files[0]);
+  const handleSubmit = async () => {
+    // Basic input validation
+    if (command.includes(';') || command.includes('&') || command.includes('|')) {
+      setError('Invalid command characters');
+      return;
     }
-  };
 
-  const handleUpload = async () => {
-    if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const response = await axios.post('http://localhost:3000/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-        setUploadStatus('Upload successful!');
-      } catch (error) {
-        console.error('Error uploading file:', error);
-        setUploadStatus('Upload failed.');
-      }
+    try {
+      const result = await axios.post('http://localhost:3000/run', { command });
+      setResponse(result.data);
+      setError(null);
+    } catch (err) {
+      console.error('Error sending command:', err);
+      setError('Failed to execute command');
     }
   };
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
-      {uploadStatus && <p>{uploadStatus}</p>}
+      <input
+        type="text"
+        value={command}
+        onChange={(e) => setCommand(e.target.value)}
+        placeholder="Enter command"
+      />
+      <button onClick={handleSubmit}>Send Command</button>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {response && <pre>{response}</pre>}
     </div>
   );
 };
 
-export default FileUploader;
+export default CommandSender;
