@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const SecretPage: React.FC = () => {
-  const [secret, setSecret] = useState('SuperSecretPassword123'); // Sensitive data in state
+const FetchData: React.FC = () => {
+  const [data, setData] = useState<string | null>(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://example.com/api/data'); // Potentially unsafe URL
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   return (
     <div>
-      <h1>Secret Information</h1>
-      <p>{secret}</p> {/* Exposing sensitive data */}
+      <button onClick={fetchData}>Fetch Data</button>
+      <div>{data}</div>
     </div>
   );
 };
 
-export default SecretPage;
+export default FetchData;
