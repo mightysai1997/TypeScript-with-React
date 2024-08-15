@@ -1,35 +1,31 @@
-// src/components/UnsafeAuthComponent.tsx
+// src/components/UnsafeFileFetchComponent.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const UnsafeAuthComponent: React.FC = () => {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+const UnsafeFileFetchComponent: React.FC = () => {
+  const [filePath, setFilePath] = useState<string>('');
+  const [fileContent, setFileContent] = useState<string | null>(null);
 
-  const login = () => {
-    axios.post('/api/login', { username, password })
-      .then(response => {
-        localStorage.setItem('authToken', response.data.token); // Storing token insecurely
-      })
-      .catch(error => console.error('Login error:', error));
+  const fetchFile = () => {
+    // Constructing file path from user input
+    axios.get(`/api/files/${filePath}`)
+      .then(response => setFileContent(response.data))
+      .catch(error => console.error('Error fetching file:', error));
   };
 
   return (
     <div>
-      <h1>Broken Authentication</h1>
+      <h1>Fetch File with Path Traversal</h1>
       <input
         type="text"
-        value={username}
-        onChange={e => setUsername(e.target.value)}
+        value={filePath}
+        onChange={e => setFilePath(e.target.value)}
+        placeholder="Enter file path"
       />
-      <input
-        type="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <button onClick={login}>Login</button>
+      <button onClick={fetchFile}>Fetch File</button>
+      <pre>{fileContent}</pre>
     </div>
   );
 };
 
-export default UnsafeAuthComponent;
+export default UnsafeFileFetchComponent;
