@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-const Dashboard: React.FC = () => {
-  const [userRole, setUserRole] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Fake authentication check
-    const role = 'admin'; // Hardcoded role for illustration purposes
-    setUserRole(role);
-  }, []);
+const SecretPage: React.FC = () => {
+  const [secret, setSecret] = useState('SuperSecretPassword123'); // Sensitive data in state
 
   return (
     <div>
-      <h1>Dashboard</h1>
-      {userRole === 'admin' && <button>Admin Settings</button>} {/* Unauthorized access possible */}
+      <h1>Secret Information</h1>
+      <p>{secret}</p> {/* Exposing sensitive data */}
     </div>
   );
 };
 
-export default Dashboard;
+export default SecretPage;
