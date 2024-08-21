@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const Comment = ({ text }) => {
-  return <div dangerouslySetInnerHTML={{ __html: text }} />;
+const UserProfile = ({ userId }) => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetch(`/api/users/${userId}`)
+      .then(response => response.json())
+      .then(data => setUser(data));
+  }, [userId]);
+
+  return user ? <div>{user.name}</div> : <div>Loading...</div>;
 };
 
-export default Comment;
+export default UserProfile;
