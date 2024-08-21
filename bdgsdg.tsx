@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
 
-const ReDoSExample: React.FC = () => {
-  const [input, setInput] = useState('');
+const VulnerableComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState<string>('');
+  const [displayValue, setDisplayValue] = useState<string>('');
 
-  const handleMatch = () => {
-    const regex = /^(a+)+$/; // Vulnerable regex
-    console.log(regex.test(input));
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // The vulnerability: directly inserting user input into innerHTML
+    setDisplayValue(inputValue);
   };
 
   return (
     <div>
-      <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
-      <button onClick={handleMatch}>Test Regex</button>
+      <input 
+        type="text" 
+        value={inputValue} 
+        onChange={handleChange} 
+      />
+      <button onClick={handleSubmit}>Submit</button>
+      <div>
+        {/* Potential XSS vulnerability here */}
+        <div dangerouslySetInnerHTML={{ __html: displayValue }} />
+      </div>
     </div>
   );
 };
 
-export default ReDoSExample;
+export default VulnerableComponent;
